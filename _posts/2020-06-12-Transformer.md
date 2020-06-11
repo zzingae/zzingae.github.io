@@ -16,10 +16,6 @@ Attention 뜻: 주의 (집중), 주목, 관심, 흥미
 ## 배경
 
 <kbd>
-<img src="https://github.com/zzingae/zzingae.github.io/blob/master/assets/images/1.png" alt="drawing" width="500"/>
-</kbd>
-
-<kbd>
 <img src="1.png" alt="drawing" width="500"/>
 </kbd>
 
@@ -30,7 +26,7 @@ RNN을 사용하는 seq2seq 모델들의 문제는, encoder의 output이 하나�
 여기서, `encoder-encoder` 그리고 `decoder-decoder` attention을 **self-attention** 이라 한다. 즉, 주어진 sequence 내의 단어끼리도 정보를 주고 받는다.
 
 <kbd>
-<img src="https://github.com/zzingae/zzingae.github.io/blob/master/images/2.png" alt="drawing" width="300"/>
+<img src="2.png" alt="drawing" width="300"/>
 </kbd>
 
 Self-attention의 예 (양 옆의 두 문장이 동일하므로 self 이다). `making [] more difficult` 구문에서 `making` 이라는 단어가 자기 자신 `making` 보다도 `more`, `difficult` 라는 단어에 attention을 크게 줌을 보여준다. 이는 문법에서 사역동사인 make 자체가 해석상 크게 중요하지 않다는 점을 연상 시킨다.
@@ -50,7 +46,7 @@ $$
 ### Attention을 이용한 정보 공유
 
 <kbd>
-<img src="https://github.com/zzingae/zzingae.github.io/blob/master/images/6.png" alt="drawing" width="300"/>
+<img src="6.png" alt="drawing" width="300"/>
 </kbd>
 
 정보 공유는 위에서 정의한 $A$ (attention) 을 이용한다. 먼저, $q$와 다른 모든 대상 벡터 $k$ 들에 대한 attention을 계산한다 $(A_1,A_2,..,A_N)$. 그리고 각 대상 벡터 $v_i=q_i$ 와 $A_i$간의 일차결합으로 정보를 결합한 결과를 얻는다. 의미는 더 많이 attention 하는 벡터를 더 높은 가중치로 더해준다는 얘기다.
@@ -62,13 +58,13 @@ $$
 추가적으로, 내적한 값 각각을 normalize하고 softmax를 통과 시킨다. 
 
 <kbd>
-<img src="https://github.com/zzingae/zzingae.github.io/blob/master/images/3.png" alt="drawing" width="300"/>
+<img src="3.png" alt="drawing" width="300"/>
 </kbd>
 
 `Mask (option)` 는 모델 학습 시 `decoder-decoder` self-attention 에만 적용되는 masking 기법이다 (아래 설명).
 
 <kbd>
-<img src="https://github.com/zzingae/zzingae.github.io/blob/master/images/4.png" alt="drawing" width="300"/>
+<img src="4.png" alt="drawing" width="300"/>
 </kbd>
 
 실제 구현에서는, 각각의 q에 대한 attention을 병렬로 구하기 위하여 매트릭스 간의 연산을 수행한다. 
@@ -125,7 +121,7 @@ residual connection이 존재하며, Feed forward network가 attention 연산 �
 ## Inference
 
 <kbd>
-<img src="https://github.com/zzingae/zzingae.github.io/blob/master/images/inference.gif" alt="drawing" width="500"/>
+<img src="inference.gif" alt="drawing" width="500"/>
 </kbd>
 
 inference시에는 어쩔수 없이 auto-regressive 방식으로 단어 하나하나를 추론해야한다. 
