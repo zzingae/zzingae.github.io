@@ -1,10 +1,7 @@
 ---
-title: "Jekyll Github 블로그에 MathJax로 수학식 표시하기"
+title: "Transformer"
 tags:
-  - Blog
-  - MathJax
-  - Jekyll
-  - LaTeX
+  - Deep-learning
 use_math: true
 ---
 
