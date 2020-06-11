@@ -3,6 +3,7 @@ title: "Transformer"
 tags:
   - Deep-learning
 use_math: true
+published : false
 ---
 
 # Transformer
@@ -15,13 +16,13 @@ Attention 뜻: 주의 (집중), 주목, 관심, 흥미
 
 ## 배경
 
+RNN을 사용하는 seq2seq 모델들의 문제는, encoder의 output이 하나의 hidden vector라는 것이다. 따라서, 모든 input sequence 정보를 하나의 vector에 저장해야하는 문제를 갖는다.
+
 <kbd>
 <img src="../images/1.png" alt="drawing" border="3px" width="500"/>
 </kbd>
 
-RNN을 사용하는 seq2seq 모델들의 문제는, encoder의 output이 하나의 hidden vector라는 것이다. 따라서, 모든 input sequence 정보를 하나의 vector에 저장해야하는 문제를 갖는다.
-
-기존의 Attention mechanism은, decoder에서 encoder의 hidden state를 사용할수 있도록 하여 이 문제를 해결한다 `encoder-decoder`. 그러나, Transformer 구조는 이를 더 확장하여, `encoder-encoder`, `decoder-decoder` 간에도 서로의 정보를 사용할 수 있도록 하였다. 
+기존의 Attention mechanism은, decoder에서 encoder의 hidden state들을 사용할수 있도록 하여 이 문제를 해결한다 `encoder-decoder`. 그러나, Transformer 구조는 이를 더 확장하여, `encoder-encoder`, `decoder-decoder` 간에도 서로의 정보를 사용할 수 있도록 했다. 
 
 여기서, `encoder-encoder` 그리고 `decoder-decoder` attention을 **self-attention** 이라 한다. 즉, 주어진 sequence 내의 단어끼리도 정보를 주고 받는다.
 
@@ -29,7 +30,7 @@ RNN을 사용하는 seq2seq 모델들의 문제는, encoder의 output이 하나�
 <img src="../images/2.png" alt="drawing" width="300"/>
 </kbd>
 
-Self-attention의 예 (양 옆의 두 문장이 동일하므로 self 이다). `making [] more difficult` 구문에서 `making` 이라는 단어가 자기 자신 `making` 보다도 `more`, `difficult` 라는 단어에 attention을 크게 줌을 보여준다. 이는 문법에서 사역동사인 make 자체가 해석상 크게 중요하지 않다는 점을 연상 시킨다.
+Self-attention의 예 (양 옆의 두 문장이 동일하므로 self 이다). `making [] more difficult` 구문 (해석: [] 을 더 어렵게 했다) 에서 `making` 이라는 단어가 자기 자신 `making` 보다도 `more`, `difficult` 라는 단어에 attention을 크게 줌을 보여준다. 이는 문법에서 사역동사인 make 자체가 해석상 크게 중요하지 않다는 점을 연상 시킨다.
 
 ## Attention
 
@@ -49,7 +50,11 @@ $$
 <img src="../images/6.png" alt="drawing" width="300"/>
 </kbd>
 
-정보 공유는 위에서 정의한 $A$ (attention) 을 이용한다. 먼저, $q$와 다른 모든 대상 벡터 $k$ 들에 대한 attention을 계산한다 $(A_1,A_2,..,A_N)$. 그리고 각 대상 벡터 $v_i=q_i$ 와 $A_i$간의 일차결합으로 정보를 결합한 결과를 얻는다. 의미는 더 많이 attention 하는 벡터를 더 높은 가중치로 더해준다는 얘기다.
+정보 공유는 위에서 정의한 $A$ (attention) 을 이용한다. 먼저, $q$ (Query) 와 다른 모든 대상 벡터 $k_i$ (Key) 들에 대한 attention을 각각 계산한다 $(A_1,A_2,..,A_N)$. 그리고 각 대상 벡터 $v_i=q_i$ 와 $A_i$간의 일차결합으로 정보를 결합한 결과를 얻는다. 
+
+
+
+의미는 더 많이 attention 하는 벡터를 더 높은 가중치로 더해준다는 얘기다.
 
 `making [] more difficult` 예 에서 $q$: `making`는 $k_i$: `more`, $k_{i+1}$: `difficult`에 가장 높은 attention을 줬다. 이는 문법적으로 `make+형용사`가 같은 덩어리로 함께 의미를 갖기 때문에 유사도가 크게 측정 된 것으로 해석된다. 따라서, $q$: `making`는 $k_{i+1}$: `difficult` 벡터에 더 큰 attention를 줘서 크게 더해진다. 즉, attention의 결과는 `making` 의미 뿐만 아니라, `more` 과 `difficult` 의미도 함께 저장하게 된다. 즉, 정보를 공유하는것이다.
 
