@@ -107,7 +107,7 @@ output sequence 단어들 간의 self-attention이다. 하지만 encoder-encoder
 
 residual connection이 존재하며, Feed forward network가 attention 연산 이후 존재하는데, 이는 1x1 convolution과 같다. 즉, 인접 위치와 독립적으로 연산된다.
 
-모델 구조를 보면 기존의 언어 모델과는 달리 각 단어간의 순서를 고려하지 않는다는 점이 특징이다. 만약 input 문장의 순서를 뒤죽박죽 섞어서 돌린다해도 결과가 변하지 않는것 처럼 보인다. 이는 분명 모델 구조의 치명적인 단점일 것이다.
+모델 구조를 보면 기존의 언어 모델과는 달리 각 단어간의 순서를 고려하지 않는다는 점이 특징이다. 만약 input 문장의 순서를 뒤죽박죽 섞어서 돌린다해도 결과가 변하지 않을 것이다 (permutation-invariant). 이는 분명 모델 구조의 치명적인 단점일 것이다.
 
 ## positional encoding
 
