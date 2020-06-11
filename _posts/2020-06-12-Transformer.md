@@ -16,7 +16,7 @@ Attention 뜻: 주의 (집중), 주목, 관심, 흥미
 ## 배경
 
 <kbd>
-<img src="../images/1.png" alt="drawing" width="500" border: 1px solid blue;/>
+<img src="../images/1.png" alt="drawing" border="3px" width="500"/>
 </kbd>
 
 RNN을 사용하는 seq2seq 모델들의 문제는, encoder의 output이 하나의 hidden vector라는 것이다. 따라서, 모든 input sequence 정보를 하나의 vector에 저장해야하는 문제를 갖는다.
