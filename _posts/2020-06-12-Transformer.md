@@ -156,6 +156,7 @@ inference시에는 어쩔수 없이 auto-regressive 방식으로 단어 하나�
 
 <kbd>
 <img src="../images/inference.gif" alt="drawing" width="500"/>
+https://ai.googleblog.com/2017/08/transformer-novel-neural-network.html
 </kbd>
 
 inference 흐름:
