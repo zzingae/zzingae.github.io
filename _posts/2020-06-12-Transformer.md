@@ -86,7 +86,11 @@ $$
 
 이와같은 linear projection을 여러개 (default=8) 동시에 사용하는것을 Multi-head attention이라고 한다. 즉, 같은 문장에 대해서도 서로 다른 방식으로 attention을 계산하고, 이 결과들을 통합 (concat+linear projection) 한다는 의미이다.
 
-그림
+<kbd>
+<img src="../images/multi-head2.png" alt="drawing" width="300"/>
+</kbd> 
+
+서로 다른 색깔의 선들 각각은 다른 head를 의미함.
 
 ## Model architecture
 
@@ -112,21 +116,27 @@ query는 출력 문장 (decoder) 내의 단어 벡터 이고, key, value 는 입
 
 decoder의 역할은, $[i->w_1, w_1->w_2,..,w_N->END]$ 매핑을 추론하여 $[w_1,w_2,..,w_N,END]$ sequence를 한번에 출력하는것이 목표이다. 
 
-그림
+<kbd>
+<img src="../images/masking.png" alt="drawing" width="300"/>
+http://www.peterbloem.nl/blog/transformers
+</kbd>
 
-이때, $w_i$를 추론하는데에 $w_j$의 정보를 사용하지 못하도록 $i<j$ 하기 위해 attention 값을 $-\inf$으로 바꾼다. 이후, softmax를 통과하면 $exp(-inf)=0$ 이 되어 attention이 masking 되므로 정보를 사용하지 못한다.
+이때, $w_i$를 추론하는데에 $w_j$의 정보를 사용하지 못하도록 $i<j$ 하기 위해 attention 값을 $-\inf$으로 masking 한다. 이후, softmax를 통과하면 $exp(-inf)=0$ 이 되어 attention이 masking 되므로 정보를 사용하지 못한다.
 
 학습 시에는 위와 같이 decoder에서 병렬로 처리 할수 있어 빠르지만, 추론 시에는 초기값 $i$를 넣고 auto-regressive 방식으로 추론하며 $END$ 토큰이 나올때까지 지속되므로 속도가 느리다.
 
 ### 그 밖에
 
-그림
+<kbd>
+<img src="../images/ffn.png" alt="drawing" width="100"/>
+</kbd>
 
-residual connection이 존재하여 attention 전,후 값을 더해준다. Feed forward network가 attention 연산 이후 존재하는데, 이는 1x1 convolution과 같다. 즉, 인접 위치와 독립적으로 연산된다.
-
-그림
-
-모델 구조를 보면 기존의 언어 모델과는 달리 각 단어간의 순서를 고려하지 않는다는 점이 특징이다. 만약 input 문장의 순서를 뒤죽박죽 섞어서 돌린다해도 결과가 변하지 않을 것이다 (permutation-invariant). 이는 분명 모델 구조의 치명적인 단점일 것이다.
+residual connection 과 layer normalization 이 존재하여 attention 전,후 값을 더해준 후 normalization 해준다 (```Add & Norm```). attention 연산 이후 ```Feed forward``` 가 존재하는데, 이는 1x1 convolution과 같다. 즉, 인접 위치와 독립적으로 연산된다.
+```
+input1: I am a boy
+input2: a I boy am
+```
+모델 구조를 보면 기존의 언어 모델과는 달리 각 단어간의 순서를 고려하지 않는다는 점이 특징이다. 만약 input 문장의 순서를 뒤죽박죽 섞어서 돌린다해도 결과가 변하지 않을 것이다 (permutation-invariant). ~~~이는 분명 모델 구조의 치명적인 단점일 것이다.~~~
 
 ## positional encoding
 
@@ -160,11 +170,11 @@ non auto-regressive 방식에 대한 연구들이 많이 있지만, 여기서는
 
 # 응용
 
-OCR 모델에 Transformer를 적용해보았다.
+OCR 모델에 Transformer를 적용했다.
 
 ## 배경
 
-RNN 모델과 달리 Transformer는 sequence 내의 특정 부분의 정보를 바로 얻을수있다. OCR의 경우 global (context) 정보 보다는 각 문자가 존재하는 local 정보가 더욱 중요하기 때문에 Transformer를 사용했다. 결과적으로, 긴 sequence의 문자열도 추론할수 있다.
+RNN 모델과 달리 Transformer는 sequence 내의 특정 부분의 정보를 바로 얻을수있다. OCR의 경우 global (context) 정보 보다는 각 문자가 존재하는 local 정보가 더욱 중요하기 때문에 Transformer를 사용했다. 결과적으로, 이미지 내의 긴 sequence의 문자열도 생성할수 있다.
 
 ## Model architecture
 
