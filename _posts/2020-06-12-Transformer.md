@@ -131,7 +131,7 @@ http://www.peterbloem.nl/blog/transformers
 <img src="../images/ffn.png" alt="drawing" width="100"/>
 </kbd>
 
-residual connection 과 layer normalization 이 존재하여 attention 전,후 값을 더해준 후 normalization 해준다 (```Add & Norm```). attention 연산 이후 ```Feed forward``` 가 존재하는데, 이는 1x1 convolution과 같다. 즉, 인접 위치와 독립적으로 연산된다.
+residual connection 과 layer normalization 이 존재하여 attention 전,후 값을 더해준 후 normalization 해준다 (```Add & Norm```). attention 연산 이후 각 단어 벡터에 대한 ```Feed forward``` 가 존재하는데, 이는 1x1 convolution과 같다. 즉, 인접 위치와 독립적으로 연산된다.
 ```
 input1: I am a boy
 input2: a I boy am
@@ -139,6 +139,8 @@ input2: a I boy am
 모델 구조를 보면 기존의 언어 모델과는 달리 각 단어간의 순서를 고려하지 않는다는 점이 특징이다. 만약 input 문장의 순서를 뒤죽박죽 섞어서 돌린다해도 결과가 변하지 않을 것이다 (permutation-invariant). ~~~이는 분명 모델 구조의 치명적인 단점일 것이다.~~~
 
 ## positional encoding
+
+https://kazemnejad.com/blog/transformer_architecture_positional_encoding/
 
 그림
 
