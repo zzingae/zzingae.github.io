@@ -3,36 +3,44 @@ title: "Transformer"
 tags:
   - Deep-learning
 use_math: true
-published : false
+published : true
 ---
 
 # Transformer
 
 ## 소개
 
-Transformer는 RNN과 같이 반복되는 (recurrence) 구조를 사용하지 않고, attention mechanism에 의존하는 모델 구조이다.
+<kbd>
+<img src="../images/RNN-unrolled.png" alt="drawing" border="3px" width="500"/>
+http://colah.github.io/posts/2015-08-Understanding-LSTMs/
+</kbd>
+
+기존 시계열 분석 모델 recurrence neural network (RNN)은 위와 같이 반복되는 구조를 사용하여 문장 내 단어들 $[x_0,..,x_N]$ 을 순차적으로 해석한다. 반면, Transformer는 attention mechanism에 의존하는 모델 구조이다.
 
 Attention 뜻: 주의 (집중), 주목, 관심, 흥미
 
 ## 배경
 
-RNN을 사용하는 seq2seq 모델들의 문제는, encoder의 output이 하나의 hidden vector라는 것이다. 따라서, 모든 input sequence 정보를 하나의 vector에 저장해야하는 문제를 갖는다.
+RNN을 사용하는 seq2seq 모델의 문제는, encoder의 출력이 하나의 벡터라는 것이다. 따라서, 모든 입력 문장 정보를 하나의 벡터에 '우겨넣어'야 하는 문제를 갖는다.
 
 <kbd>
 <img src="../images/1.png" alt="drawing" border="3px" width="500"/>
 </kbd>
 
-기존의 attention mechanism은, decoder에서 encoder의 특정 hidden state에 주목 할 수 있도록 하여 이 문제를 해결한다 `encoder-decoder`. Transformer는 이를 더 확장하여, `encoder-encoder`, `decoder-decoder` 간에도 정보를 공유 할 수 있도록 했다. 
+이를 해결하기 위한 기존의 attention mechanism은, decoder에서 encoder의 특정 hidden state에 attention 할 수 있도록 연결하여 이 문제를 해결한다 `encoder-decoder`. 
+
+Transformer는 이를 더 확장하여, `encoder-encoder`, `decoder-decoder` 간에도 정보를 공유 할 수 있도록 했다. 
 
 ### Self-attention
 
-여기서, `encoder-encoder` 그리고 `decoder-decoder` attention을 **self-attention** 이라 한다. 즉, 주어진 sequence 내의 단어끼리도 정보를 주고 받는다.
+여기서, `encoder-encoder` 그리고 `decoder-decoder` attention을 **self-attention** 이라 한다. 즉, 주어진 문장 내의 단어끼리도 정보를 주고 받는다.
 
 <kbd>
 <img src="../images/2.png" alt="drawing" width="300"/>
+https://arxiv.org/pdf/1706.03762.pdf
 </kbd>
 
-Self-attention의 예 (양 옆의 두 문장이 동일하므로 self 이다). `making [] more difficult` 구문 (해석: [ ] 을 더 어렵게 했다) 에서 `making` 이라는 단어가 자기 자신 `making` 보다도 `more`, `difficult` 라는 단어에 'attention' 했음 을 보여준다. 이는 문법에서 사역동사인 make 자체가 해석상 크게 중요하지 않다는 점을 연상 시킨다.
+위 그림은 self-attention의 예 로써, 문장 내의 단어끼리 서로 정보를 주고 받는다 (양 옆의 두 문장이 동일). `making [] more difficult` 구문 (해석: [ ] 을 더 어렵게 했다) 에서 `making` 이라는 단어가 자기 자신 `making` 보다도 `more`, `difficult` 라는 단어에 'attention' 했음 을 보여준다. 이는 문법에서 사역동사인 make 자체가 해석상 크게 중요하지 않다는 점을 연상 시킨다.
 
 ## Attention
 
@@ -50,6 +58,7 @@ $$
 
 <kbd>
 <img src="../images/6.png" alt="drawing" width="300"/>
+https://wikidocs.net/22893
 </kbd>
 
 Attention은 위에서 정의한 $A$ 를 이용한다. 먼저, attention을 구하고자 하는 $q$ (Query) 와 다른 모든 대상 벡터 $K=[k_1,k_2,..,k_N]$ (Key) 들에 대한 가중치 $A$ 를 각각 계산한다 $[A_1,A_2,..,A_N]$. 그리고 각 대상 벡터 $v_i=k_i$ (Value) 와 $A_i$간의 일차결합으로 attention 결과 $\hat{q}$ 를 얻는다. 
@@ -64,12 +73,14 @@ $$
 
 <kbd>
 <img src="../images/3.png" alt="drawing" width="200"/>
+https://arxiv.org/pdf/1706.03762.pdf
 </kbd>
 
 추가적으로, 내적한 값 각각을 `Scale` (normalize) 하고, `Softmax`를 거친다. `Mask (option)` 는 모델 학습 시 `decoder-decoder` self-attention 에만 적용되는 masking 이다 (아래 설명).
 
 <kbd>
 <img src="../images/4.png" alt="drawing" width="250"/>
+https://arxiv.org/pdf/1706.03762.pdf
 </kbd>
 
 실제 구현에서는, $Q=[q_1,q_2,..q_N]$ 에 대한 attention을 한번에 구하기 위하여 매트릭스 간의 연산을 수행한다. 
@@ -82,6 +93,7 @@ $$
 
 <kbd>
 <img src="../images/multi-head.png" alt="drawing" width="200"/>
+https://arxiv.org/pdf/1706.03762.pdf
 </kbd> 
 
 각 $q,k,v$는 attention을 계산하기에 앞서, 서로 다른 linear projection 을 통과한다 ($qw^q,kw^k,vw^v$). 따라서, self-attention ($q=k$)에서 `making` ($q_iw^q$) 이 자기 자신 `making` ($k_iw^k$) 에 가중치를 덜 줄 수 있다.
@@ -90,9 +102,10 @@ $$
 
 <kbd>
 <img src="../images/multi-head2.png" alt="drawing" width="300"/>
+https://arxiv.org/pdf/1706.03762.pdf
 </kbd> 
 
-서로 다른 색깔의 선 들은 다른 head를 의미함.
+서로 다른 색깔의 선들은 다른 head를 의미함.
 
 ## Model architecture
 
@@ -123,14 +136,19 @@ decoder의 역할은 [$i$ --> $w_1$, $w_1$ --> $w_2$, .., $w_N$ --> END] 매핑�
 http://www.peterbloem.nl/blog/transformers
 </kbd>
 
-$i<j$ 에 대해, $w_i$를 추론하는데 $w_j$의 정보를 사용하지 못하도록 attention 가중치를 $-\infty$ 으로 masking 한다. 이후 softmax를 통과하면 $e^{-\infty}=0$ 이 되어 attention 가중치가 masking 되어 정보를 사용하지 못한다.
+학습 시, 단어 $w_i$ 는 뒤에 나올 모든 단어 ${w_{i+1},..,w_N}$ 에 대해 알아도 모르는 척 해야한다. 그러기 위해서 attention 가중치를 $-\infty$ 로 덮어씌운다 (masking).
+$$
+A_{ij}=A(w_i,w_j)=-\infty, \; i<j
+$$
+이후 softmax를 통과하면 $A_{ij}=0$ 이 되어 attention 가중치가 masking 된다. 즉, 뒤에 나오는 단어 정보를 attention 하지 못하도록 한다.
 
-학습 시에는 위와 같이 decoder에서 병렬로 처리 할 수 있어 빠르지만, 추론 시에는 초기값 $i$를 넣고 auto-regressive 방식으로 추론하며 END 토큰이 나올때까지 지속되므로 속도가 느리다.
+학습 시에는 위와 같이 출력 문장을 통째로 넣어 decoder에서 병렬로 처리 할 수 있어 빠른 학습이 가능하다. 추론 시에는 출력 문장을 모르기 때문에, 초기값 $i$를 넣고 단어 하나하나를 추론하여 END 토큰이 나올때까지 지속되므로 느리다.
 
 ### 그 밖에
 
 <kbd>
 <img src="../images/ffn.png" alt="drawing" width="100"/>
+https://arxiv.org/pdf/1706.03762.pdf
 </kbd>
 
 residual connection 과 layer normalization 이 존재하여 attention 전,후 값을 더해준 후 normalization 해준다 (```Add & Norm```). attention 연산 이후 각 단어 벡터에 대한 ```Feed forward``` 가 존재하는데, 이는 1x1 convolution과 같다. 즉, 인접 위치와 독립적으로 연산된다.
@@ -142,26 +160,31 @@ input2: a I boy am
 
 ## positional encoding
 
+이를 보완하기 위해, Transformer는 embedding된 입출력 문장의 각 단어 벡터 $w_t$ 에 위치 (position) 를 표시해둔다.
+
 <kbd>
 <img src="../images/pos-enc-fig.png" alt="drawing" width="200"/>
+https://kazemnejad.com/blog/transformer_architecture_positional_encoding/
 </kbd>
 
-이를 보완하기 위해, Transformer는 입출력 문장 각 단어 $[w_1,..,w_N]$ 를 embedding 벡터로 변환 $(E)$ 한 후, 문장 내 위치를 표시해둔다. 표시하는 방법은 각 단어 벡터에 positional encoding 벡터 $p_t$ 를 더해주는 것이다.
+표시하는 방법은 각 단어 벡터에 positional encoding 벡터 $p_t$ 를 더해주는 것이다.
 
 $$
-\hat{E}(w_t)=E(w_t)+p_t
+\hat{w_t}=w_t+p_t
 $$
 
 positional encoding은 input embedding과 동일한 shape=[문장 길이, 임베딩 차원] 를 가지며, 다음과 같은 값을 가진다.
 
 <kbd>
 <img src="../images/pos-enc-form.png" alt="drawing" width="300"/>
+https://arxiv.org/pdf/1706.03762.pdf
 </kbd>
 
 즉, 위치 $pos$ 축을 따라가면 특정 주기의 sin/cos 함수 값을 가지며, 임베딩 $i$ (그림상 d) 축을 따라가면 sin/cos의 파장이 점점 길어진다.
 
 <kbd>
 <img src="../images/positional_encodings.png" alt="drawing" width="400"/>
+https://ricardokleinklein.github.io/2017/11/16/Attention-is-all-you-need.html
 </kbd>
 
 ### Why sinusoidal
@@ -186,7 +209,7 @@ positional encoding은 input embedding과 동일한 shape=[문장 길이, 임베
 <center>https://kazemnejad.com/blog/transformer_architecture_positional_encoding/</center>
 </p>
 
-attention 가중치 계산 시 사용되는 내적 연산에서 positional encoding 벡터 끼리는 상대적 위치가 멀수록 내적 값이 대칭적으로 줄어드는 것을 볼 수 있다. 직관적으로 거리가 멀수록 attention이 낮게 측정되어야 한다는 점이 잘 표현된다.
+positional encoding 벡터 끼리의 내적 연산에서, 상대적 위치가 멀수록 내적 값이 대칭적으로 줄어드는 것을 볼 수 있다. 직관적으로 거리가 멀수록 attention이 낮게 측정되어야 한다는 점이 잘 표현된다.
 
 또한 sin/cos 함수를 동시에 사용 함으로써, $p_t$ 와 $p_{t+a}$ 사이의 관계를 $t$ 와 관계 없는 행렬 $M$ 로 표현할 수 있다.
 
@@ -224,13 +247,23 @@ input sequence가 encoder를 통과하면서 단어들간의 정보가 교류된
 
 ### non auto-regressive
 
-만약 inference를 이전 단어를 무시하고, 한번에 해버린다면 어떻게 될까? 이는 주어진 문장을 각자 독방에 갖혀있는 몇명의 번역가들에게 주고, 번역한 문장내 단어중 하나씩만 말해보라고 하는것과 같을 것이다. 합쳐진 문장은 아마 중복된 단어들로 이뤄져 있거나 의미가 없는 문장이 만들어질것이다.
+만약 inference 시 이전 단어를 무시하고, 한번에 해버린다면 어떻게 될까? 이는 주어진 문장을 각자 독방에 갖혀있는 몇명의 번역가들에게 주고, 번역한 문장내 단어중 하나씩만 말해보라고 하는것과 같을 것이다. 합쳐진 문장은 아마 중복된 단어들로 이뤄져 있거나 의미가 없는 문장이 만들어질것이다.
 
 non auto-regressive 방식에 대한 연구들이 많이 있지만, 여기서는 다루지 않는다.
 
-지금까지 Transformer에서 중요한 개념들을 설명했다. 아래에는 Transformer를 적용한 응용 사례에 대해 기술했다.
+## Reference
 
-# 응용
+- https://arxiv.org/pdf/1706.03762.pdf
+- https://ai.googleblog.com/2017/08/transformer-novel-neural-network.html
+- http://colah.github.io/posts/2015-08-Understanding-LSTMs/
+- https://medium.com/@adityathiruvengadam/transformer-architecture-attention-is-all-you-need-aeccd9f50d09
+- https://wikidocs.net/22893
+- http://jalammar.github.io/illustrated-transformer/
+- https://kazemnejad.com/blog/transformer_architecture_positional_encoding/
+- http://www.peterbloem.nl/blog/transformers
+- https://ricardokleinklein.github.io/2017/11/16/Attention-is-all-you-need.html
+
+<!-- # 응용
 
 OCR 모델에 Transformer를 적용했다.
 
@@ -246,7 +279,7 @@ Transformer encoder에서는 각 위치간의 visual feature (문자의 형태) 
 
 ## Attention visualization
 
-<!-- <kbd>
+<kbd>
 <img src="https://github.com/zzingae/Transformer/blob/master/248_M2.gif" alt="drawing" width="500"/>
 </kbd> -->
 
