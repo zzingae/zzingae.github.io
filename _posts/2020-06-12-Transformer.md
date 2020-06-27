@@ -4,6 +4,7 @@ tags:
   - Deep-learning
 use_math: true
 published : true
+comments: true
 ---
 
 # Transformer
@@ -101,7 +102,7 @@ $$
 
 그렇다면 위의 예에서, `making`은 자기 자신 `making`과 가장 유사도가 클텐데 어떻게 `more`, `difficult`에 더 큰 가중치를 준것인가? 
 
-## Multi-head attention
+### Multi-head attention
 
 실제로 Transformer에서는 조금 더 복잡하게 attention을 계산하고 정보를 공유 한다 (하지만 의미는 위와 크게 다르지 않다).
 
