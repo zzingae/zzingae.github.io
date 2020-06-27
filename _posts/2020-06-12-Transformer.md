@@ -4,7 +4,6 @@ tags:
   - Deep-learning
 use_math: true
 published : true
-comments: true
 ---
 
 # Transformer

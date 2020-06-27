@@ -266,6 +266,11 @@ compress_html:
     envs: development
 
 
+comments:
+  provider               : "disqus"
+  disqus:
+    shortname            : zzingae-github-io # Short-name
+
 # Defaults
 defaults:
   # _posts
