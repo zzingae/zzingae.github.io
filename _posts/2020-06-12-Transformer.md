@@ -21,7 +21,7 @@ Attention 뜻: 주의 (집중), 주목, 관심, 흥미
 
 ## 배경
 
-RNN을 사용하는 seq2seq 모델의 문제는, encoder의 출력이 하나의 벡터라는 것이다. 따라서, 모든 입력 문장 정보를 하나의 벡터에 '우겨넣어'야 하는 문제를 갖는다.
+RNN을 사용하는 seq2seq 모델의 문제는, encoder의 출력이 하나의 벡터라는 것이다. 따라서, 모든 입력 문장 정보를 하나의 벡터에 모두 넣어야 하는 문제를 갖는다.
 
 <p align="center"> 
 <img src="../images/1.jpeg" alt="drawing" width="400"/> 
