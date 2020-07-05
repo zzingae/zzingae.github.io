@@ -11,7 +11,7 @@ published : true
 ## 소개
 
 <p align="center"> 
-<img src="../images/RNN-unrolled.png" alt="drawing" width="500"/> 
+<img src="../images/Transformer/RNN-unrolled.png" alt="drawing" width="500"/> 
 <center>Ref. 2</center>
 </p>
 
@@ -24,7 +24,7 @@ Attention 뜻: 주의 (집중), 주목, 관심, 흥미
 RNN을 사용하는 seq2seq 모델의 문제는, encoder의 출력이 하나의 벡터라는 것이다. 따라서, 모든 입력 문장 정보를 하나의 벡터에 모두 넣어야 하는 문제를 갖는다.
 
 <p align="center"> 
-<img src="../images/1.jpeg" alt="drawing" width="400"/> 
+<img src="../images/Transformer/1.jpeg" alt="drawing" width="400"/> 
 <center>Ref. 10</center>
 </p>
 
@@ -37,7 +37,7 @@ Transformer는 이를 더 확장하여, `encoder-encoder`, `decoder-decoder` 간
 여기서, `encoder-encoder` 그리고 `decoder-decoder` attention을 **self-attention** 이라 한다. 즉, 주어진 문장 내의 단어끼리도 정보를 주고 받는다.
 
 <p align="center"> 
-<img src="../images/2.png" alt="drawing" width="300"/> 
+<img src="../images/Transformer/2.png" alt="drawing" width="300"/> 
 <center>Ref. 1</center>
 </p>
 
@@ -60,7 +60,7 @@ $$
 ### Attention을 이용한 정보 공유
 
 <p align="center"> 
-<img src="../images/6.png" alt="drawing" width="300"/> 
+<img src="../images/Transformer/6.png" alt="drawing" width="300"/> 
 <center>Ref. 5</center>
 </p>
 
@@ -86,14 +86,14 @@ $$
 ### 그 밖에
 
 <p align="center"> 
-<img src="../images/3.png" alt="drawing" width="300"/> 
+<img src="../images/Transformer/3.png" alt="drawing" width="300"/> 
 <center>Ref. 1</center>
 </p>
 
 추가적으로, 내적한 값 각각을 `Scale` (normalize) 하고, `Softmax`를 거친다. `Mask (option)` 는 모델 학습 시 `decoder-decoder` self-attention 에만 적용되는 masking 이다 (아래 설명).
 
 <p align="center"> 
-<img src="../images/4.png" alt="drawing" width="400"/> 
+<img src="../images/Transformer/4.png" alt="drawing" width="400"/> 
 <center>Ref. 1</center>
 </p>
 
@@ -106,7 +106,7 @@ $$
 실제로 Transformer에서는 조금 더 복잡하게 attention을 계산하고 정보를 공유 한다 (하지만 의미는 위와 크게 다르지 않다).
 
 <p align="center"> 
-<img src="../images/multi-head.png" alt="drawing" width="200"/> 
+<img src="../images/Transformer/multi-head.png" alt="drawing" width="200"/> 
 <center>Ref. 1</center>
 </p>
 
@@ -115,7 +115,7 @@ $$
 이와같은 linear projection을 여러개 (default=8) 동시에 사용하는것을 Multi-head attention이라고 한다. 즉, 같은 문장에 대해서도 서로 다른 방식으로 attention을 계산하고, 이 결과들을 통합 (concat+linear projection) 한다는 의미이다.
 
 <p align="center"> 
-<img src="../images/multi-head2.png" alt="drawing" width="300"/> 
+<img src="../images/Transformer/multi-head2.png" alt="drawing" width="300"/> 
 <center>Ref. 1</center>
 </p>
 
@@ -146,7 +146,7 @@ Transformer 모델은 크게 encoder와 decoder로 구성되어 있다. 입력�
 decoder의 역할은 [$i$ --> $w_1$, $w_1$ --> $w_2$, .., $w_N$ --> END] 매핑이며, $[w_1,w_2,..,w_N,END]$ sequence를 한번에 출력하는것이 목표이다. 
 
 <p align="center"> 
-<img src="../images/masking.png" alt="drawing" width="300"/> 
+<img src="../images/Transformer/masking.png" alt="drawing" width="300"/> 
 <center>Ref. 8</center>
 </p>
 
@@ -163,7 +163,7 @@ $$
 ### 그 밖에
 
 <p align="center"> 
-<img src="../images/ffn.png" alt="drawing" width="200"/> 
+<img src="../images/Transformer/ffn.png" alt="drawing" width="200"/> 
 <center>Ref. 1</center>
 </p>
 
@@ -179,7 +179,7 @@ input2: a I boy am
 이를 보완하기 위해, Transformer는 embedding된 입출력 문장의 각 단어 벡터 $w_t$ 에 위치 (position) 를 표시해둔다.
 
 <p align="center"> 
-<img src="../images/pos-enc-fig.png" alt="drawing" width="300"/> 
+<img src="../images/Transformer/pos-enc-fig.png" alt="drawing" width="300"/> 
 <center>Ref. 7</center>
 </p>
 
@@ -192,14 +192,14 @@ $$
 positional encoding은 input embedding과 동일한 shape=[문장 길이, 임베딩 차원] 를 가지며, 다음과 같은 값을 가진다.
 
 <p align="center"> 
-<img src="../images/pos-enc-form.png" alt="drawing" width="400"/> 
+<img src="../images/Transformer/pos-enc-form.png" alt="drawing" width="400"/> 
 <center>Ref. 1</center>
 </p>
 
 즉, 위치 $pos$ 축을 따라가면 특정 주기의 sin/cos 함수 값을 가지며, 임베딩 $i$ (그림상 d) 축을 따라가면 sin/cos의 파장이 점점 길어진다.
 
 <p align="center"> 
-<img src="../images/positional_encodings.png" alt="drawing" width="400"/> 
+<img src="../images/Transformer/positional_encodings.png" alt="drawing" width="400"/> 
 <center>Ref. 9</center>
 </p>
 
@@ -210,7 +210,7 @@ positional encoding은 input embedding과 동일한 shape=[문장 길이, 임베
 우선, 서로 다른 주기의 sin/cos 함수 배열은 이진법으로 큰 숫자를 표현하는 것과 흡사하다.
 
 <p align="center"> 
-<img src="../images/binary.png" alt="drawing" width="300"/> 
+<img src="../images/Transformer/binary.png" alt="drawing" width="300"/> 
 <center>Ref. 7</center>
 </p>
 
@@ -219,7 +219,7 @@ positional encoding은 input embedding과 동일한 shape=[문장 길이, 임베
 또 하나의 이점은 상대적인 위치 관계를 표현하기 수월하다는 점이다.
 
 <p align="center"> 
-<img src="../images/pos-enc-dot.png" alt="drawing" width="400"/> 
+<img src="../images/Transformer/pos-enc-dot.png" alt="drawing" width="400"/> 
 <center>Ref. 7</center>
 </p>
 
@@ -251,7 +251,7 @@ $$
 inference시에는 어쩔수 없이 auto-regressive 방식으로 단어 하나하나를 추론해야한다.
 
 <p align="center"> 
-<img src="../images/inference.gif" alt="drawing" width="600"/> 
+<img src="../images/Transformer/inference.gif" alt="drawing" width="600"/> 
 <center>Ref. 2</center>
 </p>
 
