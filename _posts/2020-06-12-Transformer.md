@@ -259,7 +259,7 @@ inference 흐름:
 
 input sequence가 encoder를 통과하면서 단어들간의 정보가 교류된다 `encoder-encoder`. decoder의 입력은 초기 벡터와 함께 encoder output이다. decoder에서 단어 하나하나를 추론하기 위해, 이전 추론 결과 정보 `decoder-decoder` 와 함께 encoder output 정보도 함께 사용된다 `encoder-decoder`. 현재 추론된 단어는 다음 단어 추론의 초기값이 된다.
 
-### non-autoregressive
+### non-autoregressive (작성중)
 
 만약 inference 시 이전에 추론한 단어들을 고려하지 않고, 한번에 inference 한다면 어떨까? 즉, ```decoder-decoder``` 를 사용하지 않음을 의미한다. 
 
@@ -281,8 +281,6 @@ $$
 <center>Ref. 12</center>
 </p>
 
-
-
 하지만, 최근 non-autoregressive 방식으로도 좋은 결과를 보인 연구들이 많이 있다.
 
 ## Reference
@@ -299,6 +297,7 @@ $$
 10. http://www.davidsbatista.net/blog/2020/01/25/Attention-seq2seq/
 11. https://arxiv.org/pdf/1711.02281.pdf
 12. bishop, pattern recognition and machine learning
+
 <!-- # 응용
 
 OCR 모델에 Transformer를 적용했다.
