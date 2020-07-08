@@ -259,11 +259,31 @@ inference 흐름:
 
 input sequence가 encoder를 통과하면서 단어들간의 정보가 교류된다 `encoder-encoder`. decoder의 입력은 초기 벡터와 함께 encoder output이다. decoder에서 단어 하나하나를 추론하기 위해, 이전 추론 결과 정보 `decoder-decoder` 와 함께 encoder output 정보도 함께 사용된다 `encoder-decoder`. 현재 추론된 단어는 다음 단어 추론의 초기값이 된다.
 
-### non auto-regressive
+### non-autoregressive
 
-만약 inference 시 이전에 추론한 단어들을 고려하지 않고, 한번에 inference 한다면 어떨까? 즉, ```decoder-decoder``` 를 사용하지 않음을 의미한다. 이는 주어진 문장을 각자 독방에 갖혀있는 몇명의 번역가들에게 주고, 번역한 문장내 단어중 하나씩만 말해보라고 하는것과 같을 것이다. 합쳐진 문장은 아마 중복된 단어들로 이뤄져 있거나 의미가 없는 문장이 만들어질것이다.
+만약 inference 시 이전에 추론한 단어들을 고려하지 않고, 한번에 inference 한다면 어떨까? 즉, ```decoder-decoder``` 를 사용하지 않음을 의미한다. 
 
-하지만, 최근 non auto-regressive 방식으로도 좋은 결과를 보인 연구들이 많이 있다.
+```
+"Intuitively, such a decoder is akin to a panel of human translators each asked to provide a single word of a translation independently of the words their colleagues choose.", Ref. 11
+```
+주어진 문장을 각자 독방에 갖혀있는 몇명의 번역가들에게 주고, 번역한 문장내 단어중 하나씩만 말해보라고 하는것과 같을 것이다. 
+
+합쳐진 문장은 아마 중복된 단어들로 이뤄져 있거나 의미가 없는 문장이 만들어질것이다. 왜냐하면 decoding 하는 각 위치 $y_1,y_2,..,y_N$에서는 다른 위치에서 무엇을 decoding 했는지 모르기 때문이다.
+
+이러한 경우, 서로 다른 위치 $y_i, y_j$ 를 주어진 문장 $X$ 에 대해 conditional independent 하다고 한다:
+
+$$
+p(y_i,y_j \mid X) = p(y_i \mid X) p(y_j \mid X)
+$$
+
+<p align="center"> 
+<img src="../images/Transformer/conditional-independent.png" alt="drawing" width="200"/> 
+<center>Ref. 12</center>
+</p>
+
+
+
+하지만, 최근 non-autoregressive 방식으로도 좋은 결과를 보인 연구들이 많이 있다.
 
 ## Reference
 
@@ -277,7 +297,8 @@ input sequence가 encoder를 통과하면서 단어들간의 정보가 교류된
 8. http://www.peterbloem.nl/blog/transformers
 9. https://ricardokleinklein.github.io/2017/11/16/Attention-is-all-you-need.html
 10. http://www.davidsbatista.net/blog/2020/01/25/Attention-seq2seq/
-
+11. https://arxiv.org/pdf/1711.02281.pdf
+12. bishop, pattern recognition and machine learning
 <!-- # 응용
 
 OCR 모델에 Transformer를 적용했다.
