@@ -263,25 +263,25 @@ input sequence가 encoder를 통과하면서 단어들간의 정보가 교류된
 
 만약 inference 시 이전에 추론한 단어들을 고려하지 않고, 한번에 inference 한다면 어떨까? 즉, ```decoder-decoder``` 를 사용하지 않음을 의미한다. 
 
-```
-"Intuitively, such a decoder is akin to a panel of human translators each asked to provide a single word of a translation independently of the words their colleagues choose.", Ref. 11
-```
-주어진 문장을 각자 독방에 갖혀있는 몇명의 번역가들에게 주고, 번역한 문장내 단어중 하나씩만 말해보라고 하는것과 같을 것이다. 
+이는 주어진 문장 $X$ 을 각자 독방에 갖혀있는 몇명의 번역가들에게 주고, 번역한 문장내 단어 $y_i$ 하나만 말해보라고 하는것과 같을 것이다. 다른 번역가들이 어떤 단어를 말했는지 모르기 때문에, 합쳐진 문장은 아마 중복된 단어들로 이뤄져 있거나 순서가 뒤죽박죽인 문장이 만들어질 것이다.
 
-합쳐진 문장은 아마 중복된 단어들로 이뤄져 있거나 의미가 없는 문장이 만들어질것이다. 왜냐하면 decoding 하는 각 위치 $y_1,y_2,..,y_N$에서는 다른 위치에서 무엇을 decoding 했는지 모르기 때문이다.
-
-이러한 경우, 서로 다른 위치 $y_i, y_j$ 를 주어진 문장 $X$ 에 대해 conditional independent 하다고 한다:
+이러한 경우, 서로 다른 위치의 단어들 $y_1,..,y_N$ 이 주어진 문장 $X$ 에 대해 conditional independent 하다고 한다:
 
 $$
 p(y_i,y_j \mid X) = p(y_i \mid X) p(y_j \mid X)
 $$
 
-<p align="center"> 
-<img src="../images/Transformer/conditional-independent.png" alt="drawing" width="200"/> 
-<center>Ref. 12</center>
+<!-- <p align="center"> 
+<img src="../images/Transformer/conditional_independence_commander.png" alt="drawing" width="400"/> 
+<center>Ref. 13</center>
 </p>
 
-하지만, 최근 non-autoregressive 방식으로도 좋은 결과를 보인 연구들이 많이 있다.
+예를 들어, 위 그림과 같이 officerA ($y_i$) 와 officerB ($y_j$) 는 Commander ($X$) 에 대해 conditional independent 이다. 
+
+만약 Commander 의 명령을 모르는 상태에서 officerA 가 officerB=Go 인 상태를 관찰한다면 Commander 의 명령이 있다고 생각하고, officerA=Go 상태가 될 확률이 높아질 것이다. 따라서, officerA 와 officerB 는 서로 독립이 아니다. 
+
+반면 Commander 의 명령을 알고있다면, OfficerB 가 무엇을 하는지에 관계없이 Commander 의 명령에 따르므로 conditional independent 가 된다. -->
+
 
 ## Reference
 
@@ -297,6 +297,7 @@ $$
 10. http://www.davidsbatista.net/blog/2020/01/25/Attention-seq2seq/
 11. https://arxiv.org/pdf/1711.02281.pdf
 12. bishop, pattern recognition and machine learning
+13. https://actruce.com/conditional-independence/
 
 <!-- # 응용
 
