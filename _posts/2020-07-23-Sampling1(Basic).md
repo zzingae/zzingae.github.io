@@ -17,6 +17,11 @@ published : true
 
 # Basic sampling
 
+<p align="center"> 
+<img src="../images/Sampling/sampling_methods_diagram.png" alt="drawing" width="300"/> 
+<center>Ref. 4</center>
+</p>
+
 “What is sampling? `Sampling` is the act, process, or technique of selecting a suitable sample, or a `representative` part of a population for the purpose of determining parameters or `characteristics` of the whole `population`.”
 
 샘플링은 전체 집단의 대표적인 부분을 선택하는 방법으로써, 전체 집단의 특성을 결정하는 목적으로 사용된다. 
