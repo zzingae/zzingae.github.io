@@ -64,7 +64,7 @@ $A(q,k)=q \cdot k$
 
 Attention은 위에서 정의한 $A$ 를 이용한다. 먼저, attention을 구하고자 하는 $q$ (Query) 와 다른 모든 대상 벡터 $K=[k_1,k_2,..,k_N]$ (Key) 들에 대한 가중치 $A$ 를 각각 계산한다 $[A_1,A_2,..,A_N]$. 그리고 각 대상 벡터 $v_i=k_i$ (Value) 와 $A_i$간의 일차결합으로 attention 결과 $\hat{q}$ 를 얻는다. 
 
-$$
+$
 \hat{q_i}=Attention(q_i,K,V)=(q_i \cdot K) \cdot V=
   \begin{pmatrix}
     A_1 A_2 &..& A_N
@@ -75,7 +75,7 @@ $$
 	.. \\
 	v_N
   \end{pmatrix}
-$$
+$
 
 의미는 query가 주목하는 벡터를 더 높은 가중치로 더하여, 정보를 결합한다는 뜻이다.
 
