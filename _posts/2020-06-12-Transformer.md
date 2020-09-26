@@ -15,7 +15,11 @@ published : true
 <center>Ref. 2</center>
 </p>
 
+<<<<<<< HEAD
 기존 시계열 분석 모델 recurrence neural network (RNN)은 위와 같이 반복되는 구조를 사용하여 문장 내 단어들 $[x_0,..,x_N]$ 을 순차적으로 해석한다. 반면, Transformer는 attention mechanism에 의존하여, 병렬적으로 문장을 해석하는 구조를 가진다.
+=======
+기존 시계열 분석 모델 recurrence neural network (RNN)은 위와 같이 반복되는 구조를 사용하여 문장 내 단어들 $x_0,..,x_N$ 을 순차적으로 해석한다. 반면, Transformer는 attention mechanism에 의존하는 모델 구조이다.
+>>>>>>> master
 
 Attention 뜻: 주의 (집중), 주목, 관심, 흥미
 
@@ -51,9 +55,7 @@ Transformer는 attention을 통해 정보를 직접적으로 공유한다. 그�
 
 하나의 단어 벡터 $q$ (Query) 가 대상 단어 벡터 $k$ (Key) 에게 얼마나 'attention' 하는 지를 수치화한 값 (weight) 이며, 수치화 하는 방법은 두 벡터 간의 내적이다. 
 
-$$
-A(q,k)=q \cdot k
-$$
+$A(q,k)=q \cdot k$
 
 두 벡터가 유사할수록 내적이 크며, 자신과 유사한 벡터에게 더 큰 attention weight $A$ 를 준다.
 
@@ -66,7 +68,7 @@ $$
 
 Attention은 위에서 정의한 내적 $A$ 를 이용한다. 먼저, attention을 구하고자 하는 $q$ (Query) 와 다른 모든 대상 벡터 $K=[k_1,k_2,..,k_N]$ (Key) 들에 대한 가중치 $A$ 를 각각 계산한다 $[A_1,A_2,..,A_N]$. 그리고 각 대상 벡터 $v_i=k_i$ (Value) 와 $A_i$간의 일차결합으로 attention 결과 $\hat{q}$ 를 얻는다. 
 
-$$
+$
 \hat{q_i}=Attention(q_i,K,V)=(q_i \cdot K) \cdot V=
   \begin{pmatrix}
     A_1 A_2 &..& A_N
@@ -77,7 +79,7 @@ $$
 	.. \\
 	v_N
   \end{pmatrix}
-$$
+$
 
 의미는 query가 주목하는 벡터를 더 높은 가중치로 더하여, 정보를 결합한다는 뜻이다.
 
@@ -137,7 +139,32 @@ input 문장 단어들 간의 self-attention이다. 각 query, key, value는 inp
 
 #### encoder-decoder
 
+<<<<<<< HEAD
 output 문장 생성 시 input 문장의 정보를 사용하기 위한 attention이다. query는 output 문장 내의 단어 벡터 이고, key와 value 는 input 문장 (encoder output) 내의 단어 벡터 이다 ($k_i=v_i$).
+=======
+출력 문장 생성 시 (decoder), 입력 문장의 정보를 사용하기 위한 attention이다. query는 출력 문장 (decoder) 내의 단어 벡터 이고, key, value 는 입력 문장 (encoder output) 내의 단어 벡터 이다 ($k_i=v_i$).
+
+#### decoder-decoder
+
+출력 문장 (decoder) 내 단어들 간의 self-attention이다. 학습 시 `encoder-encoder` 와 달리 attention에 masking 이 된다.
+
+### Attention masking
+
+모델 학습 시, 우리는 이미 입력 문장에 대응하는 출력 문장 $[w_1,w_2,..,w_N]$ 을 알고있다. 따라서, 초기 값 $i$를 맨 앞에 붙여서 decoder에 통째로 넣는다 $[i,w_1,w_2,..,w_N]$. 
+
+decoder의 역할은 [$i$ --> $w_1$, $w_1$ --> $w_2$, .., $w_N$ --> END] 매핑이며, $[w_1,w_2,..,w_N,END]$ sequence를 한번에 출력하는것이 목표이다. 
+
+<p align="center"> 
+<img src="../images/Transformer/masking.png" alt="drawing" width="300"/> 
+<center>Ref. 8</center>
+</p>
+
+학습 시, 단어 $w_i$ 는 뒤에 나올 모든 단어 ${w_{i+1},..,w_N}$ 에 대해 알아도 모르는 척 해야한다. 그러기 위해서 attention 가중치를 $-\infty$ 로 덮어씌운다 (masking).
+
+$
+A_{ij}=A(w_i,w_j)=-\infty, \; i<j
+$
+>>>>>>> master
 
 #### decoder self-attention
 
@@ -168,9 +195,9 @@ input2: a I boy am
 
 표시하는 방법은 각 단어 벡터에 positional encoding 벡터 $p_t$ 를 더해주는 것이다.
 
-$$
+$
 \hat{w_t}=w_t+p_t
-$$
+$
 
 positional encoding은 input embedding과 동일한 shape=[문장 길이, 임베딩 차원] 를 가지며, 다음과 같은 값을 가진다.
 
@@ -210,7 +237,7 @@ positional encoding 벡터 끼리의 내적 연산에서, 상대적 위치가 �
 
 또한 sin/cos 함수를 동시에 사용 함으로써, $p_t$ 와 $p_{t+a}$ 사이의 관계를 $t$ 와 관계 없는 행렬 $M$ 로 표현할 수 있다.
 
-$$
+$
 M\begin{bmatrix}
 	    \sin(t) \\
 	    \cos(t)
@@ -218,14 +245,14 @@ M\begin{bmatrix}
 	    \sin(t + \phi) \\
 	    \cos(t + \phi)
 	\end{bmatrix},
-$$
+$
 
-$$
+$
   M = \begin{bmatrix}
         \cos(\phi) & \sin(\phi) \\
         - \sin(\phi) & \cos(\phi)
     \end{bmatrix}
-$$
+$
 
 따라서 특정 $t$ 와 관계없이 상대적 위치를 attention 하는 $M$ 과 같은 linear projection을 학습하기 쉽다.
 
@@ -277,20 +304,9 @@ input sequence가 encoder를 통과하면서 단어들간의 정보가 교류된
 
 이러한 경우, 서로 다른 위치의 단어들 $y_1,..,y_N$ 이 주어진 문장 $X$ 에 대해 conditional independent 하다고 한다:
 
-$$
+$
 p(y_i,y_j \mid X) = p(y_i \mid X) p(y_j \mid X)
-$$
-
-<!-- <p align="center"> 
-<img src="../images/Transformer/conditional_independence_commander.png" alt="drawing" width="400"/> 
-<center>Ref. 13</center>
-</p>
-
-예를 들어, 위 그림과 같이 officerA ($y_i$) 와 officerB ($y_j$) 는 Commander ($X$) 에 대해 conditional independent 이다. 
-
-만약 Commander 의 명령을 모르는 상태에서 officerA 가 officerB=Go 인 상태를 관찰한다면 Commander 의 명령이 있다고 생각하고, officerA=Go 상태가 될 확률이 높아질 것이다. 따라서, officerA 와 officerB 는 서로 독립이 아니다. 
-
-반면 Commander 의 명령을 알고있다면, OfficerB 가 무엇을 하는지에 관계없이 Commander 의 명령에 따르므로 conditional independent 가 된다. -->
+$
 
 
 ## Reference
@@ -308,24 +324,4 @@ $$
 11. https://arxiv.org/pdf/1711.02281.pdf
 12. bishop, pattern recognition and machine learning
 13. https://actruce.com/conditional-independence/
-
-<!-- # 응용
-
-OCR 모델에 Transformer를 적용했다.
-
-## 배경
-
-RNN 모델과 달리 Transformer는 sequence 내의 특정 부분의 정보를 바로 얻을수있다. OCR의 경우 global (context) 정보 보다는 각 문자가 존재하는 local 정보가 더욱 중요하기 때문에 Transformer를 사용했다. 결과적으로, 이미지 내의 긴 sequence의 문자열도 생성할수 있다.
-
-## Model architecture
-
-CNN + Transformer: shallow CNN을 통해 이미지의 feature를 얻고 이를 flat 하여 Transformer의 입력으로 사용한다. Transformer의 구조는 위와 동일하다. 출력은 이미지에 나와있는 텍스트가 추출된다.
-
-Transformer encoder에서는 각 위치간의 visual feature (문자의 형태) 정보가 공유된다 (encoder-encoder attention). Transformer decoder에서는 visual feature 들의 정보 (encoder-decoder attention)를 바탕으로, 이미지 내의 텍스트를 추론하게 된다. 이때 decoder-decoder attention 으로 부터, 이전에 추론된 문자들의 linguistic feature 정보 또한 사용하게 된다.
-
-## Attention visualization
-
-<kbd>
-<img src="https://github.com/zzingae/Transformer/blob/master/248_M2.gif" alt="drawing" width="500"/>
-</kbd> -->
 
