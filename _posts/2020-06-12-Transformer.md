@@ -15,11 +15,7 @@ published : true
 <center>Ref. 2</center>
 </p>
 
-<<<<<<< HEAD
 기존 시계열 분석 모델 recurrence neural network (RNN)은 위와 같이 반복되는 구조를 사용하여 문장 내 단어들 $[x_0,..,x_N]$ 을 순차적으로 해석한다. 반면, Transformer는 attention mechanism에 의존하여, 병렬적으로 문장을 해석하는 구조를 가진다.
-=======
-기존 시계열 분석 모델 recurrence neural network (RNN)은 위와 같이 반복되는 구조를 사용하여 문장 내 단어들 $x_0,..,x_N$ 을 순차적으로 해석한다. 반면, Transformer는 attention mechanism에 의존하는 모델 구조이다.
->>>>>>> master
 
 Attention 뜻: 주의 (집중), 주목, 관심, 흥미
 
@@ -85,9 +81,9 @@ $
 
 `making [] more difficult` 예 에서 `making` (query) 는 `more` (key1)와 `difficult` (key2) 에 가장 '주목' 했다. 따라서, `making`은 `more`, `difficult` 벡터에 더 큰 가중치를 줘서 더해진다. 
 
-$$
+$
 \hat{\text{making}} = A_1 \text{making} + A_2 \text{more} + A_3 \text{difficult} + ...
-$$
+$
 
 즉, `making`의 attention의 결과는 `making` 의미 뿐만 아니라, `more` 과 `difficult` 의미도 함께 저장하게 된다. 즉, 정보를 공유하는것이다.
 
@@ -139,32 +135,7 @@ input 문장 단어들 간의 self-attention이다. 각 query, key, value는 inp
 
 #### encoder-decoder
 
-<<<<<<< HEAD
 output 문장 생성 시 input 문장의 정보를 사용하기 위한 attention이다. query는 output 문장 내의 단어 벡터 이고, key와 value 는 input 문장 (encoder output) 내의 단어 벡터 이다 ($k_i=v_i$).
-=======
-출력 문장 생성 시 (decoder), 입력 문장의 정보를 사용하기 위한 attention이다. query는 출력 문장 (decoder) 내의 단어 벡터 이고, key, value 는 입력 문장 (encoder output) 내의 단어 벡터 이다 ($k_i=v_i$).
-
-#### decoder-decoder
-
-출력 문장 (decoder) 내 단어들 간의 self-attention이다. 학습 시 `encoder-encoder` 와 달리 attention에 masking 이 된다.
-
-### Attention masking
-
-모델 학습 시, 우리는 이미 입력 문장에 대응하는 출력 문장 $[w_1,w_2,..,w_N]$ 을 알고있다. 따라서, 초기 값 $i$를 맨 앞에 붙여서 decoder에 통째로 넣는다 $[i,w_1,w_2,..,w_N]$. 
-
-decoder의 역할은 [$i$ --> $w_1$, $w_1$ --> $w_2$, .., $w_N$ --> END] 매핑이며, $[w_1,w_2,..,w_N,END]$ sequence를 한번에 출력하는것이 목표이다. 
-
-<p align="center"> 
-<img src="../images/Transformer/masking.png" alt="drawing" width="300"/> 
-<center>Ref. 8</center>
-</p>
-
-학습 시, 단어 $w_i$ 는 뒤에 나올 모든 단어 ${w_{i+1},..,w_N}$ 에 대해 알아도 모르는 척 해야한다. 그러기 위해서 attention 가중치를 $-\infty$ 로 덮어씌운다 (masking).
-
-$
-A_{ij}=A(w_i,w_j)=-\infty, \; i<j
-$
->>>>>>> master
 
 #### decoder self-attention
 
@@ -275,9 +246,7 @@ Transformer 학습 시, encoder 입력으로 input 문장 $[w_1,w_2,..,w_N,E]$ �
 
 그러기 위해서 attention weight matrix $(M \times M)$ 에서, 단어 위치 $i$ 와 그 뒤 단어 위치 $j$ 에 대한 weight를 $-\infty$ 로 덮어씌운다 (masking).
 
-$$
-A_{ij}=A(w_i,w_j)=-\infty, \; i<j
-$$
+$A_{ij}=A(w_i,w_j)=-\infty, \; i<j$
 
 이후 softmax를 통과하면 $A_{ij}=0$ 이 되어 attention이 masking 되므로, 뒤에 나오는 단어 정보를 이용하지 못한다.
 
