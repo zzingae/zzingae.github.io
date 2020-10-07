@@ -260,18 +260,18 @@ $A_{ij}=A(w_i,w_j)=-\infty, \; i<j$
 
 <p align="center"> 
 <img src="../images/Transformer/num_param.png" alt="drawing" width="600"/> 
-<center>Ref. 1</center>
+<center>Ref. 1 (head 개수 (h) 와 attention 차원 (d_k, d_v) 이 반비례 관계여서 파라미터의 개수가 65M 으로 동일)</center>
 </p>
 
 *모든 bias 및 layer normalization 파라미터 개수는 생략함*
 
 Encoder 6개 layer 각각:
-- multi-head self-attention (3: Query,Key,value)
+- multi-head self-attention (3: Query,Key,Value)
   - 8x(512x64)x3 + 8x64x512 = 1,048,576
 - feed-forward
   - 512x2048 + 2048x512 = 2,097,152
 
-= `18,874,368`
+x6 = `18,874,368`
 
 Decoder 6개 layer 각각:
 - multi-head self-attention
@@ -281,7 +281,7 @@ Decoder 6개 layer 각각:
 - feed-forward
   - 512x2048 + 2048x512 = 2,097,152
 
-= `25,165,824`
+x6 = `25,165,824`
 
 Shared Embedding layer (input, output, pre-softmax):
 - 37000 (WMT 2014 English-German tokens) x 512 
@@ -290,7 +290,7 @@ Shared Embedding layer (input, output, pre-softmax):
 
 Total=`62,984,192` (paper: 65,000,000)
 
-## Inference
+## Inference (autoregressive)
 
 추론 시에는 output 문장을 모르기 때문에, 시작 토큰 $S$ 를 넣고 다음 단어를 추론하고 이를 다음 입력으로 사용하는 것을 반복하여 문장을 생성한다. 이러한 추론 방식을 `autoregressive` 라 한다. 
 
@@ -301,13 +301,22 @@ Total=`62,984,192` (paper: 65,000,000)
 
 inference 흐름:
 
-input sequence가 encoder를 통과하면서 단어들간의 정보가 교류된다 `encoder-encoder`. decoder의 입력은 초기 벡터와 함께 encoder output이다. decoder에서 단어 하나하나를 추론하기 위해, 이전 추론 결과 정보 `decoder-decoder` 와 함께 encoder output 정보도 함께 사용된다 `encoder-decoder`. 현재 추론된 단어는 다음 단어 추론의 초기값이 된다.
+input sequence가 encoder를 통과하면서 입력 단어들간의 정보가 교류된다 `encoder-encoder`. decoder의 입력은 초기 벡터와 함께 encoder output이다. decoder에서 단어 하나하나를 추론하기 위해, 이전 추론 결과 정보 `decoder-decoder` 와 함께 encoder output 정보도 함께 사용된다 `encoder-decoder`. 현재 추론된 단어는 다음 단어 추론의 초기값이 된다.
 
-### non-autoregressive (작성중)
+## Inference (non-autoregressive)
 
-만약 inference 시 이전에 추론한 단어들을 고려하지 않고, 한번에 inference 한다면 어떨까? 즉, ```decoder-decoder``` 를 사용하지 않음을 의미한다. 
+만약 inference 시 이전에 추론한 단어들을 고려하지 않고, 한번에 병렬적으로 추론 한다면 어떨까? 즉, ```decoder-decoder``` 를 사용하지 않음을 의미한다. 
 
 이는 주어진 문장 $X$ 을 각자 독방에 갖혀있는 몇명의 번역가들에게 주고, 번역한 문장내 단어 $y_i$ 하나만 말해보라고 하는것과 같을 것이다. 다른 번역가들이 어떤 단어를 말했는지 모르기 때문에, 합쳐진 문장은 아마 중복된 단어들로 이뤄져 있거나 순서가 뒤죽박죽인 문장이 만들어질 것이다.
+
+이러한 문제를 `multimodality problem` 이라고도 하는데, 다음의 예와 같은 상황이다:
+
+- input: Give me ice americano!
+- possible autoregressive output1: `차가운` 아메리카노 주세요!
+- possible autoregressive output2: 아메리카노 `차가운걸로` 주세요!
+- non-autoregressive output: `차가운 차가운걸로` 주세요!
+
+이러한 현상이 발생하는 이유는 이전에 추론했던 단어와 독립적으로 각 위치를 번역하기 때문이다.
 
 이러한 경우, 서로 다른 위치의 단어들 $y_1,..,y_N$ 이 주어진 문장 $X$ 에 대해 conditional independent 하다고 한다:
 
@@ -315,6 +324,13 @@ $
 p(y_i,y_j \mid X) = p(y_i \mid X) p(y_j \mid X)
 $
 
+conditional independent의 좋은 예를 설명한 자료: https://actruce.com/conditional-independence/
+
+### Conditional masked model
+
+https://arxiv.org/pdf/1904.09324.pdf
+
+non-autoregressive model의 문제를 해결하기 위한 직관적인 방법으로, non-autoregressive 방식으로 병렬 추론하되 이를 여러번 반복하며 추론 결과들을 누적한다. 즉, 추론 결과가 확실한 부분을 기반 (condition) 으로 애매한 부분 (mask) 을 조금씩 채워나가는 방식이다.
 
 ## Reference
 
