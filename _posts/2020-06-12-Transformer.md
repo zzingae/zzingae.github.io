@@ -212,17 +212,17 @@ positional encoding 벡터 끼리의 내적 연산에서, 상대적 위치가 �
 
 $
 M\begin{bmatrix}
-	    \sin(t) \\
+	    \sin(t); \\
 	    \cos(t)
 	\end{bmatrix} = \begin{bmatrix}
-	    \sin(t + \phi) \\
+	    \sin(t + \phi); \\
 	    \cos(t + \phi)
 	\end{bmatrix},
 $
 
 $
   M = \begin{bmatrix}
-        \cos(\phi) & \sin(\phi) \\
+        \cos(\phi) & \sin(\phi); \\
         - \sin(\phi) & \cos(\phi)
     \end{bmatrix}
 $
