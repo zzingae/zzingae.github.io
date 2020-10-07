@@ -116,7 +116,9 @@ $
 
 각 $q,k,v$는 attention을 계산하기에 앞서, 서로 다른 linear projection 을 통과한다 ($qw^q,kw^k,vw^v$). 따라서, self-attention ($q=k$)에서 `making` ($q_iw^q$) 이 자기 자신 `making` ($k_iw^k$) 에 가중치를 덜 줄 수 있다.
 
-이와같은 linear projection을 여러개 (default=8) 동시에 사용하는것을 `Multi-head attention` 이라고 한다. 즉, 같은 문장에 대해서도 서로 다른 방식으로 attention을 계산하고, 이 결과들을 통합 (concat+linear projection) 한다는 의미이다.
+이와같은 linear projection을 여러개 (default=8) 동시에 사용하는것을 `Multi-head attention` 이라고 한다. 즉, 같은 문장에 대해서도 서로 다른 방식으로 attention을 계산하고, 이 결과들을 통합 (concat+linear projection) 한다는 의미이다. 
+
+참고로 head의 개수가 많아질수록 attention 연산에 사용되는 벡터의 차원은 ($d/h$) 로 감소하기 때문에, 파라미터의 개수와 연산량은 변함이 없다.
 
 <p align="center"> 
 <img src="../images/Transformer/multi-head2.png" alt="drawing" width="300"/> 
@@ -227,6 +229,8 @@ $
 
 따라서 특정 $t$ 와 관계없이 상대적 위치를 attention 하는 $M$ 과 같은 linear projection을 학습하기 쉽다.
 
+it would allow the model to easily learn to attend by relative positions, since for any fixed offset k, PE(pos+k) can be represented as a linear function of PE(pos).
+
 ## Training
 
 Transformer 학습 시, encoder 입력으로 input 문장 $[w_1,w_2,..,w_N,E]$ 이 사용된다 (E는 end token). decoder의 입력으로 output 문장 $[S, w_1,w_2,..,w_M]$ 을 사용한다 (S는 start token). 
@@ -251,6 +255,40 @@ $A_{ij}=A(w_i,w_j)=-\infty, \; i<j$
 이후 softmax를 통과하면 $A_{ij}=0$ 이 되어 attention이 masking 되므로, 뒤에 나오는 단어 정보를 이용하지 못한다.
 
 학습 시에는 output 문장을 통째로 decoder에 넣어서 병렬로 처리 할 수 있어 빠르다.
+
+### Base model parameter 개수 (근사치)
+
+<p align="center"> 
+<img src="../images/Transformer/num_param.png" alt="drawing" width="600"/> 
+<center>Ref. 1</center>
+</p>
+
+*모든 bias 및 layer normalization 파라미터 개수는 생략함*
+
+Encoder 6개 layer 각각:
+- multi-head self-attention (3: Query,Key,value)
+  - 8x(512x64)x3 + 8x64x512 = 1,048,576
+- feed-forward
+  - 512x2048 + 2048x512 = 2,097,152
+
+= `18,874,368`
+
+Decoder 6개 layer 각각:
+- multi-head self-attention
+  - 8x(512x64)x3 + 8x64x512 = 1,048,576
+- multi-head encoder-attention
+  - 8x(512x64)x3 + 8x64x512 = 1,048,576
+- feed-forward
+  - 512x2048 + 2048x512 = 2,097,152
+
+= `25,165,824`
+
+Shared Embedding layer (input, output, pre-softmax):
+- 37000 (WMT 2014 English-German tokens) x 512 
+
+= `18,944,000`
+
+Total=`62,984,192` (paper: 65,000,000)
 
 ## Inference
 
