@@ -57,13 +57,6 @@ RNN의 weight는 모든 시간에 대해서 공유하여 사용하기 때문에,
 - Line.8에서 얻은 값 dh_(t-1) 은 다음 루프 t-1에서 dh_t가 되며, Line.4 에서 현재 update와 더해져서 누적된다.
 - Line.3의 dW_hy의 경우, 현재의 output에만 영향을 미치는 weight 이기 때문에, 오류가 시간에 따라 역전되는 dh 계산에는 포함되지 않는다.
 
-# Conditional mask
-
-<p align="center"> 
-<img src="../images/maskpredict_process.gif" alt="drawing" width="800"/> 
-<center>https://simonjisu.github.io/paper/2020/07/19/maskpredict.html</center>
-</p>
-
 <p align="center"> 
 <img src="../images/ML.png" alt="drawing" width="800"/> 
 <center>https://www.tensorflow.org/about</center>
@@ -104,3 +97,10 @@ skip-gram (W와 W' 매트릭스) 학습 과정 (negative sampling):
 
 # Metrics
 perplexity, cross entropy, KL divergence, BLEU, CTC
+
+<!-- # Conditional mask
+
+<p align="center"> 
+<img src="../images/maskpredict_process.gif" alt="drawing" width="800"/> 
+<center>https://simonjisu.github.io/paper/2020/07/19/maskpredict.html</center>
+</p> -->
