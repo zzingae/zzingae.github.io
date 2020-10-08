@@ -1,5 +1,5 @@
 ---
-title: "RNN"
+title: "miscellanea"
 tags:
   - Deep-learning
 use_math: true
@@ -16,7 +16,7 @@ published : true
 For example, the model opens a \begin{proof} environment but then ends it with a \end{lemma}. This is an example of a problem we’d have to fix manually, and is likely due to the fact that the dependency is too `long-term`.
 
 <p align="center"> 
-<img src="../images/RNN-seq2seq.png" alt="drawing" width="800"/> 
+<img src="../images/RNN-seq2seq.png" alt="drawing" width="900"/> 
 <center>https://github.com/tensorflow/nmt</center>
 </p>
 
@@ -54,7 +54,7 @@ For example, the model opens a \begin{proof} environment but then ends it with a
 각 문장에서 가까이 함께 자주 나오는 단어들을 임베딩 벡터 차원에서 유사하도록 학습. 즉, 함께 나온 단어끼리 내적하여 값이 크도록 하고, 그렇지 않은 단어들끼리는 내적값이 작도록 학습한다.
 
 <p align="center"> 
-<img src="../images/word2vec.png" alt="drawing" width="500"/> 
+<img src="../images/word2vec.png" alt="drawing" width="800"/> 
 <center>https://towardsdatascience.com/word2vec-skip-gram-model-part-1-intuition-78614e4d6e0b</center>
 </p>
 
@@ -66,7 +66,7 @@ skip-gram (W와 W' 매트릭스) 학습 과정 (negative sampling):
 - (i, k)는 negative 이므로, $W_i$와 $W'_k$ 의 내적 값이 작도록 학습 ($W_i$와 $W'_j$ 값 조정))
 
 <p align="center"> 
-<img src="../images/lol.png" alt="drawing" width="500"/> 
+<img src="../images/lol.png" alt="drawing" width="800"/> 
 <center>'ㅋ'와 유사한 것들</center>
 </p>
 
