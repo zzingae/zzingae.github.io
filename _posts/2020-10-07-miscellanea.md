@@ -26,6 +26,36 @@ For example, the model opens a \begin{proof} environment but then ends it with a
 
 # Backpropagation through time (BPTT)
 
+<p align="center"> 
+<img src="../images/BPTT1.png" alt="drawing" width="800"/> 
+<center>https://www.coursera.org/lecture/nlp-sequence-models/backpropagation-through-time-bc7ED</center>
+</p>
+
+RNN training시 x와 이전 프레임에서 계산된 a가 input으로 사용된다.
+
+a는 프레임을 계속 지나치며 값이 갱신되므로, back-propagation 시에도 마찬가지로 이전 프레임으로 오류를 전파해야 한다.
+
+이러한 RNN에서 사용되는 back-propagation을 Backpropagation through time (BPTT) 라고 한다.
+
+<p align="center"> 
+<img src="../images/BPTT2.png" alt="drawing" width="800"/> 
+<center>https://www.coursera.org/lecture/nlp-sequence-models/backpropagation-through-time-bc7ED</center>
+</p>
+
+매 프레임마다 loss가 생기며 이러한 loss들의 합이 전체 loss가 된다.
+
+RNN의 weight는 모든 시간에 대해서 공유하여 사용하기 때문에, loss에 의한 update를 아래 Algorithm과 같이 계속 누적시킨다.
+
+<p align="center"> 
+<img src="../images/BPTT_alg.png" alt="drawing" width="800"/> 
+<center>https://github.com/lmthang/thesis/blob/master/thesis.pdf</center>
+</p>
+
+알고리즘 관련 특이사항:
+
+- Line.1 에서, for t=T–>1 이므로, 맨 마지막 시점부터 루프가 시작됨.
+- Line.8에서 얻은 값 dh_(t-1) 은 다음 루프 t-1에서 dh_t가 되며, Line.4 에서 현재 update와 더해져서 누적된다.
+- Line.3의 dW_hy의 경우, 현재의 output에만 영향을 미치는 weight 이기 때문에, 오류가 시간에 따라 역전되는 dh 계산에는 포함되지 않는다.
 
 # Conditional mask
 
