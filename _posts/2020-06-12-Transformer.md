@@ -94,7 +94,7 @@ $
 <center>Ref. 1</center>
 </p>
 
-추가적으로, 내적한 값 각각을 `Scale` 하고, `Softmax`를 거쳐 normalize한다 ( `Mask (opt.)` 는 학습 시 decoder self-attention 에만 적용되는 attention masking).
+추가적으로, 내적한 값 각각을 `Scale` 하고, `Softmax`를 거쳐 normalize한다. `Mask (opt.)` 는 학습 시 decoder self-attention 에만 적용되는 attention masking.
 
 <p align="center"> 
 <img src="../images/Transformer/4.png" alt="drawing" width="400"/> 
