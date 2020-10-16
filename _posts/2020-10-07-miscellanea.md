@@ -13,6 +13,9 @@ published : false
 <center>http://karpathy.github.io/2015/05/21/rnn-effectiveness/</center>
 </p>
 
+https://pytorch.org/tutorials/intermediate/seq2seq_translation_tutorial.html
+Unlike sequence prediction with a single RNN, where every input corresponds to an output, the seq2seq model frees us from sequence length and order, which makes it ideal for translation between two languages.
+
 For example, the model opens a \begin{proof} environment but then ends it with a \end{lemma}. This is an example of a problem we’d have to fix manually, and is likely due to the fact that the dependency is too `long-term`.
 
 <p align="center"> 
