@@ -150,7 +150,15 @@ output 문장 단어들 간의 self-attention이다. 각 query, key, value는 ou
 <center>Ref. 1</center>
 </p>
 
-residual connection 과 layer normalization 이 존재하여 attention 전,후 값을 더해준 후 normalization 해준다 (```Add & Norm```). attention 연산 이후 각 단어 벡터에 대한 ```Feed forward``` 가 존재하는데, 이는 1x1 convolution과 같다. 즉, 인접 위치와 독립적으로 연산된다.
+Residual connection에 의해 attention 전,후 값을 더해준다. 예를 들어 `making`이 residual connection을 거치면:
+
+$
+\hat{\text{making}} = \text{making} + A_1 \text{making} + A_2 \text{more} + A_3 \text{difficult} + ...
+$
+
+따라서, 기존 정보와 더불어 공유된 정보들이 추가된다. 그리고, 값을 normalization 한다 (```Add & Norm```). 
+
+attention 연산 이후 각 단어 벡터에 대한 ```Feed forward``` 가 존재하는데, 이는 1x1 convolution과 같다. 즉, 인접 위치와 독립적으로 연산된다.
 ```
 input1: I am a boy
 input2: a I boy am
