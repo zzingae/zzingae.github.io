@@ -8,78 +8,74 @@ published : false
 
 # RNN
 
-유닛 간의 연결이 순환적 구조. 내부에 상태를 `저장`하고, sequence 입력을 처리 
-
-$
-h_t=tanh(W*h_{t-1}+W’*x_t)
-$
+유닛 간의 연결이 순환적 구조. 내부에 상태를 `저장`하고, sequence 입력을 처리 $h_t = tanh(W_hh_{t-1}+W_ex_t)$
 
 <p align="center"> 
 <img src="../images/RNNs.png" alt="drawing" width="800"/> 
 <center>http://karpathy.github.io/2015/05/21/rnn-effectiveness/</center>
 </p>
 
-https://pytorch.org/tutorials/intermediate/seq2seq_translation_tutorial.html
-Unlike sequence prediction with a single RNN, where every input corresponds to an output, the seq2seq model frees us from sequence length and order, which makes it ideal for translation between two languages.
-
-For example, the model opens a \begin{proof} environment but then ends it with a \end{lemma}. This is an example of a problem we’d have to fix manually, and is likely due to the fact that the dependency is too `long-term`.
+[source](http://karpathy.github.io/2015/05/21/rnn-effectiveness/): For example, the model opens a `\begin{proof}` environment but then ends it with a `\end{lemma}`. This is an example of a problem we’d have to fix manually, and is likely due to the fact that the dependency is too long-term.
 
 <p align="center"> 
 <img src="../images/RNN-seq2seq.png" alt="drawing" width="900"/> 
 <center>https://github.com/tensorflow/nmt</center>
 </p>
 
+[source](https://pytorch.org/tutorials/intermediate/seq2seq_translation_tutorial.html): Unlike sequence prediction with a single RNN, where every input corresponds to an output, the seq2seq model frees us from sequence length and order, which makes it ideal for translation between two languages.
+
+# Backpropagation through time
+
+<p align="center"> 
+<img src="../images/RNN.png" alt="drawing" width="800"/> <center>https://medium.com/datadriveninvestor/how-do-lstm-networks-solve-the-problem-of-vanishing-gradients-a6784971a577</center>
+</p>
+
+<p align="center"> 
+<img src="../images/BPTT1.png" alt="drawing" width="200"/> <center>??</center>
+</p>
+
+<p align="center"> 
+<img src="../images/BPTT2.png" alt="drawing" width="150"/> 
+</p>
+
+각 시점에서 발생한 오류들을 누적
+
+<p align="center"> 
+<img src="../images/BPTT3.png" alt="drawing" width="400"/> 
+</p>
+
+tanh 함수의 미분값 ($\sigma'$)들이 연달아 곱해져서 gradient vanishing.
+
 # LSTM
 
-매 프레임 forget, input, output (input: [h,x], sigmoid output: 0~1 값) gate 세개를 생성하고, cell state에 대해 정보를 제거 (forget), 추가 (input), 출력 (output) 한다. 
+추가 저장공간 (cell)을 가지며, forget (x), input (+), output 게이트로 cell 정보 흐름을 control. Forget gate를 통해, 역전파 기울기 소실 문제 해결 (먼 시점으로부터 학습 가능).
 
-# Backpropagation through time (BPTT)
+# Connectionist temporal classification (CTC)
 
-<p align="center"> 
-<img src="../images/BPTT1.png" alt="drawing" width="800"/> 
-<center>https://www.coursera.org/lecture/nlp-sequence-models/backpropagation-through-time-bc7ED</center>
-</p>
+분리되지 않은 (unsegmented) 시계열 데이터를 레이블링 하는 방법:
+‘aaa’, ‘a-a’
 
-RNN training시 x와 이전 프레임에서 계산된 a가 input으로 사용된다.
+# Transformer
 
-a는 프레임을 계속 지나치며 값이 갱신되므로, back-propagation 시에도 마찬가지로 이전 프레임으로 오류를 전파해야 한다.
+RNN, LSTM 의 순차적,순환적 처리 대신 병렬적으로 시계열 데이터 처리.
+Feed-forward와 attention (+self-attention) 만을 이용한 sequence 입력 처리 구조. Attention을 통한 direct 정보 접근.
 
-이러한 RNN에서 사용되는 back-propagation을 Backpropagation through time (BPTT) 라고 한다.
-
-<p align="center"> 
-<img src="../images/BPTT2.png" alt="drawing" width="800"/> 
-<center>https://www.coursera.org/lecture/nlp-sequence-models/backpropagation-through-time-bc7ED</center>
-</p>
-
-매 프레임마다 loss가 생기며 이러한 loss들의 합이 전체 loss가 된다.
-
-RNN의 weight는 모든 시간에 대해서 공유하여 사용하기 때문에, loss에 의한 update를 아래 Algorithm과 같이 계속 누적시킨다.
-
-<p align="center"> 
-<img src="../images/BPTT_alg.png" alt="drawing" width="800"/> 
-<center>https://github.com/lmthang/thesis/blob/master/thesis.pdf</center>
-</p>
-
-알고리즘 관련 특이사항:
-
-- Line.1 에서, for t=T–>1 이므로, 맨 마지막 시점부터 루프가 시작됨.
-- Line.8에서 얻은 값 dh_(t-1) 은 다음 루프 t-1에서 dh_t가 되며, Line.4 에서 현재 update와 더해져서 누적된다.
-- Line.3의 dW_hy의 경우, 현재의 output에만 영향을 미치는 weight 이기 때문에, 오류가 시간에 따라 역전되는 dh 계산에는 포함되지 않는다.
+# Machine learning?
 
 <p align="center"> 
 <img src="../images/ML.png" alt="drawing" width="800"/> 
 <center>https://www.tensorflow.org/about</center>
 </p>
 
-# 용어
+# NLP 용어
 
-정제 (cleaning)
-정규화 (normalization)
-불용어 (stopword)
-어간 추출 (stemming)
-표제어 추출 (lemmatization)
-정규 표현식 (regular expression)
-토큰화 (tokenization)
+- 정제 (cleaning)
+- 정규화 (normalization)
+- 불용어 (stopword)
+- 어간 추출 (stemming)
+- 표제어 추출 (lemmatization)
+- 정규 표현식 (regular expression)
+- 토큰화 (tokenization)
 
 # word2vec
 
@@ -97,19 +93,53 @@ skip-gram (W와 W' 매트릭스) 학습 과정 (negative sampling):
 - (i, j)는 positive 이므로, $W_i$와 $W'_j$ 의 내적 값이 크도록 학습 ($W_i$와 $W'_j$ 값 조정)
 - (i, k)는 negative 이므로, $W_i$와 $W'_k$ 의 내적 값이 작도록 학습 ($W_i$와 $W'_k$ 값 조정))
 
-<p align="center"> 
-<img src="../images/lol.png" alt="drawing" width="800"/> 
-<center>'ㅋ'와 유사한 것들</center>
-</p>
-
 질문: 왜 W와 W' 의 가중치를 공유하여 학습하지 않는가??
 
 # Metrics
-perplexity, cross entropy, KL divergence, BLEU, CTC
+
+### Precision
+
+GT: `abc` 에 대해 prediction: `abcde` 와 같이 길게 예측하면 패널티
+- $\frac{TP}{TP+FP}$
+
+### Recall
+
+GT: `abc` 에 대해 prediction: `ab`와 같이 짧게 예측하면 패널티
+- $\frac{TP}{TP+FN}$
+
+### BLEU
+
+Ground truth에 대한 Ngram (default:1~4) precision들의 기하 평균.
+짧게 예측하면 precision은 영향을 받지 않으므로 brevity term으로 패널티를 줌.
+
+### Perplexity
+
+Language 모델이 주어진 실제 문장에 대해 당황한 정도.
+낮을수록 좋은 모델.
+
+### Cross entropy
+
+실제 분포에 대해 모델링한 분포로 coding 했을때, 평균 bit 수.
+
+$KL divergence(p,q) = Cross entropy(p,q) – Entropy(p)$
+
+- 불필요한 평균 비트 수
+
+### Mutual information
+
+KL divergence( p(x,y), p(x)p(y) )
+
+Y에 대해 알게 됬을때, x의 불확실성이 감소되는 정도 (x 정보량 감소)
+
 
 <!-- # Conditional mask
 
 <p align="center"> 
 <img src="../images/maskpredict_process.gif" alt="drawing" width="800"/> 
 <center>https://simonjisu.github.io/paper/2020/07/19/maskpredict.html</center>
+</p>
+
+<p align="center"> 
+<img src="../images/lol.png" alt="drawing" width="800"/> 
+<center>'ㅋ'와 유사한 것들</center>
 </p> -->
