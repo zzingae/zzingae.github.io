@@ -8,6 +8,12 @@ published : false
 
 # RNN
 
+유닛 간의 연결이 순환적 구조. 내부에 상태를 `저장`하고, sequence 입력을 처리 
+
+$
+h_t=tanh(W*h_{t-1}+W’*x_t)
+$
+
 <p align="center"> 
 <img src="../images/RNNs.png" alt="drawing" width="800"/> 
 <center>http://karpathy.github.io/2015/05/21/rnn-effectiveness/</center>

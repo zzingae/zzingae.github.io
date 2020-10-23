@@ -237,7 +237,7 @@ $
 
 따라서 특정 $t$ 와 관계없이 상대적 위치를 attention 하는 $M$ 과 같은 linear projection을 학습하기 쉽다.
 
-it would allow the model to easily learn to attend by relative positions, since for any fixed offset k, PE(pos+k) can be represented as a linear function of PE(pos).
+[Ref.1](https://arxiv.org/pdf/1706.03762.pdf): it would allow the model to easily learn to attend by relative positions, since for any fixed offset k, PE(pos+k) can be represented as a linear function of PE(pos).
 
 ## Training
 
