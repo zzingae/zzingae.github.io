@@ -99,13 +99,19 @@ skip-gram (W와 W' 매트릭스) 학습 과정 (negative sampling):
 
 ### Precision
 
-GT: `abc` 에 대해 prediction: `abcde` 와 같이 길게 예측하면 패널티
-- $\frac{TP}{TP+FP}$
+$\frac{TP}{TP+FP}$
+- Ground truth: `abc`
+- Prediction: `abcde` 와 같이 길게 예측하면, false positive 인 `de` 에 의해 패널티
+- Prediction: `ab` 와 같이 짧게 예측해도, false negative 인 `c` 가 무시되어 패널티를 받지 않음
 
 ### Recall
 
-GT: `abc` 에 대해 prediction: `ab`와 같이 짧게 예측하면 패널티
-- $\frac{TP}{TP+FN}$
+$\frac{TP}{TP+FN}$
+- GT: `abc`
+- prediction: `ab`와 같이 짧게 예측하면, false negative 인 `c` 에 의해 패널티
+- prediction: `abcde` 와 같이 길게 예측해도, false positive 인 `de` 가 무시되어 패널티를 받지 않음
+
+따라서 Precision & Recall 은 서로 상호보완적임.
 
 ### BLEU
 
